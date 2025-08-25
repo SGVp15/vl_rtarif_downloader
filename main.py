@@ -136,7 +136,8 @@ def clean_old_files(folder, file_patterns=['rii', 'rti', 'rka'], num_files_to_ke
     logger.info("Очистка завершена.")
     logger.info("-" * 50)
 
+
 if __name__ == "__main__":
     for target_url, target_folder in TARGET_URLS.items():
         download_latest_files(target_url, target_folder, num_files_to_download=NUM_LAST_FILES_TO_DOWNLOAD)
-        clean_old_files(target_folder, num_files_to_keep=15)
+        clean_old_files(target_folder, num_files_to_keep=NUM_LAST_FILES_TO_DOWNLOAD * len(TARGET_URLS))
