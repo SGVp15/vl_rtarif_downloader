@@ -90,6 +90,53 @@ def download_latest_files(base_url, download_folder, num_files_to_download=5):
     logger.info("-" * 50)
 
 
+def clean_old_files(folder, file_patterns=['rii', 'rti', 'rka'], num_files_to_keep=10):
+    """
+    Оставляет только указанное количество самых новых файлов для каждого типа.
+
+    Args:
+        folder (str): Путь к папке.
+        file_patterns (list): Список префиксов файлов для фильтрации.
+        num_files_to_keep (int): Количество файлов каждого типа, которые нужно оставить.
+    """
+    logger.info(f"Начинаю очистку папки: {folder}")
+
+    if not os.path.exists(folder):
+        logger.warning(f"Папка {folder} не найдена. Очистка невозможна.")
+        return
+
+    for pattern in file_patterns:
+        # Получаем все файлы, соответствующие шаблону
+        all_files = [os.path.join(folder, f) for f in os.listdir(folder) if f.startswith(pattern)]
+
+        if not all_files:
+            logger.info(f"В папке {folder} не найдено файлов, соответствующих шаблону '{pattern}'.")
+            continue
+
+        # Сортируем файлы по времени изменения (от старых к новым)
+        all_files.sort(key=os.path.getmtime)
+
+        # Определяем, какие файлы нужно удалить
+        files_to_delete = all_files[:-num_files_to_keep]
+
+        if not files_to_delete:
+            logger.info(f"Для шаблона '{pattern}' нет старых файлов для удаления. Оставляю {len(all_files)}.")
+            continue
+
+        logger.info(f"Найдено {len(files_to_delete)} старых файлов для удаления (шаблон: '{pattern}').")
+
+        # Удаляем старые файлы
+        for file_path in files_to_delete:
+            try:
+                os.remove(file_path)
+                logger.info(f"Удален файл: {os.path.basename(file_path)}")
+            except OSError as e:
+                logger.error(f"Ошибка при удалении файла {file_path}: {e}")
+
+    logger.info("Очистка завершена.")
+    logger.info("-" * 50)
+
 if __name__ == "__main__":
     for target_url, target_folder in TARGET_URLS.items():
         download_latest_files(target_url, target_folder, num_files_to_download=NUM_LAST_FILES_TO_DOWNLOAD)
+        clean_old_files(target_folder, num_files_to_keep=10)
