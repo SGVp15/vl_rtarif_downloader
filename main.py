@@ -2,7 +2,7 @@ import os
 import logging
 import requests
 from bs4 import BeautifulSoup
-from config import TARGET_URLS
+from config import TARGET_URLS, NUM_LAST_FILES_TO_DOWNLOAD
 
 log_file = "downloader.log"
 logging.basicConfig(
@@ -92,4 +92,4 @@ def download_latest_files(base_url, download_folder, num_files_to_download=5):
 
 if __name__ == "__main__":
     for target_url, target_folder in TARGET_URLS.items():
-        download_latest_files(target_url, target_folder, num_files_to_download=5)
+        download_latest_files(target_url, target_folder, num_files_to_download=NUM_LAST_FILES_TO_DOWNLOAD)
