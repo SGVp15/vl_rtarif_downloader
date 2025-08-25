@@ -1,7 +1,7 @@
 TARGET_URLS = {
     'https://files.daobit.ru/RATLAS/RENEW/': 'downloads/ratlas',
     'https://files.daobit.ru/RINFO/RENEW/': 'downloads/rinfo',
-    'https://files.daobit.ru/RTARIFF/RENEW/': 'downloads/ratlas',
+    'https://files.daobit.ru/RTARIFF/RENEW/': 'downloads/rtariff',
 }
 
-NUM_LAST_FILES_TO_DOWNLOAD=5
+NUM_LAST_FILES_TO_DOWNLOAD = 5
